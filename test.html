@@ -1,0 +1,12 @@
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content="{Astro.generator}" />
+		<title>Astro</title>
+	</head>
+	<body>
+        <iframe id=formFrame src=http://localhost:5173/default sandbox="allow-same-origin allow-scripts allow-popups allow-forms" frameborder=0 style='width:100%;border:none' scrolling="no"></iframe><script>function adjustHeight(e){const t=document.getElementById("formFrame");t&&(t.style.height=`${e}px`)}function sendMessageToParent(){const e=document.body.scrollHeight+45;window.parent.postMessage({type:"adjustHeight",height:e},"*")}document.addEventListener("DOMContentLoaded",(()=>{window.addEventListener("message",(e=>{e.data&&"adjustHeight"===e.data.type&&adjustHeight(e.data.height)})),sendMessageToParent()}))</script>
+	</body>
+</html>
