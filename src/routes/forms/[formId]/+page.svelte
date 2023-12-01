@@ -2,9 +2,9 @@
 	import type { PageData } from './$types';
 	import DefaultForm from '$lib/components/DefaultForm.svelte';
 	export let data: PageData;
-	$: ({ formId } = data);
+	$: ({ clientSecret, formId, returnUrl } = data);
 </script>
 
-{#if formId === 'default'}
-	<DefaultForm />
+{#if formId === 'default' && clientSecret}
+	<DefaultForm {clientSecret} {returnUrl} />
 {/if}

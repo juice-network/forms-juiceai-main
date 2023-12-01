@@ -1,6 +1,18 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
+	import { PUBLIC_STRIPE_KEY } from '$env/static/public';
+	import { loadStripe, type Stripe, type StripeElements } from '@stripe/stripe-js';
+	import { onMount } from 'svelte';
+	import { Elements, PaymentElement } from 'svelte-stripe';
+	export let clientSecret: string;
+	export let returnUrl: string;
 	let purpose: string;
+	let stripe: Stripe | null = null;
+	let elements: StripeElements | undefined;
+	onMount(async () => {
+		stripe = await loadStripe(PUBLIC_STRIPE_KEY);
+	});
 </script>
 
 <article class="prose max-w-2xl">
@@ -30,7 +42,32 @@
 	<p class="text-gray-900">
 		Fill out the form below to get a personalized report delivered STRAIGHT to your inbox!
 	</p>
-	<form id="myForm" class="mx-full px-1" method="POST" action={$page.url.href}>
+	<form
+		id="myForm"
+		class="mx-full px-1"
+		method="POST"
+		action={$page.url.href}
+		use:enhance={async () => {
+			if (stripe && elements) {
+				const { error } = await stripe.confirmPayment({
+					elements,
+					confirmParams: {
+						return_url: returnUrl
+					}
+				});
+
+				if (error) {
+					// handle error
+					console.error(error);
+				}
+			}
+
+			return async ({ result, update }) => {
+				// `result` is an `ActionResult` object
+				// `update` is a function which triggers the default logic that would be triggered if this callback wasn't set
+			};
+		}}
+	>
 		<div class="mb-5">
 			<label for="firstname" class="block mb-2 font-medium text-gray-900">First Name</label>
 			<input
@@ -109,57 +146,11 @@
 			</p>
 			<div class="rounded-lg border-2 focus-within:ring-blue-500 focus-within:border-blue-500 p-4">
 				<h4 class="text-4xl font-extrabold"><span>$</span>2.99</h4>
-				<div class="relative w-full flex">
-					<input
-						class="rounded-md peer pl-12 pr-2 py-2 border-2 border-gray-200 placeholder-gray-300 w-1/2 outline-none ring-0 border-none focus:outline-none focus:ring-0 focus:border-none"
-						type="text"
-						name="card_number"
-						placeholder="Card Number"
-						required
-					/>
-					<input
-						class="rounded-md peer p-2 border-2 border-gray-200 placeholder-gray-300 w-1/4 outline-none ring-0 border-none focus:outline-none focus:ring-0 focus:border-none"
-						type="text"
-						name="exp_date"
-						placeholder="MM / YY"
-						required
-					/>
-					<input
-						class="rounded-md peer p-2 border-2 border-gray-200 placeholder-gray-300 w-1/4 outline-none ring-0 border-none focus:outline-none focus:ring-0 focus:border-none"
-						type="text"
-						name="cvc"
-						placeholder="CVC"
-						required
-					/>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="absolute bottom-0 left-0 -mb-0.5 transform translate-x-1/2 -translate-y-1/2 text-black peer-placeholder-shown:text-gray-300 h-6 w-6"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke="currentColor"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-						/>
-					</svg>
-				</div>
-				<div class="flex flex-col">
-					<input
-						class="rounded-md peer p-2 border-2 border-gray-200 placeholder-gray-300 outline-none ring-0 border-none focus:outline-none focus:ring-0 focus:border-none"
-						type="text"
-						name="card_name"
-						placeholder="Name on card"
-					/>
-					<input
-						class="rounded-md peer p-2 border-2 border-gray-200 placeholder-gray-300 outline-none ring-0 border-none focus:outline-none focus:ring-0 focus:border-none"
-						type="email"
-						name="card_email"
-						placeholder="Email"
-					/>
-				</div>
+				{#if stripe && clientSecret}
+					<Elements {stripe} {clientSecret} bind:elements>
+						<PaymentElement />
+					</Elements>
+				{/if}
 			</div>
 		</div>
 		<button
