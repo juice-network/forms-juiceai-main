@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	export let formId: string;
-	const src = `${$page.url.origin}/forms/${formId}`;
+	export let paymentType: string;
+	const src = `${$page.url.origin}/forms/${formId}/${paymentType}`;
 </script>
 
 <pre class="m-0"><code class="whitespace-break-spaces"

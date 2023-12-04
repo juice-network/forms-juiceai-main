@@ -3,8 +3,13 @@ import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ url }) => {
 	// pull payment intent id from the URL query string
-	const id = url.searchParams.get('payment_intent');
+	const id = url.searchParams.get('payment_intent') ?? null;
+	let message;
 
+	if (!id) {
+		message = 'Something went wrong.';
+		return { message };
+	}
 	// ask Stripe for latest info about this paymentIntent
 	const paymentIntent = await stripe.paymentIntents.retrieve(id);
 
@@ -16,7 +21,6 @@ export const load: PageServerLoad = async ({ url }) => {
 	 *
 	 * [0] https://stripe.com/docs/payments/payment-methods#payment-notification
 	 */
-	let message;
 
 	switch (paymentIntent.status) {
 		case 'succeeded':
