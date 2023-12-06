@@ -15,7 +15,8 @@ export const load: PageServerLoad = async ({ params }) => {
 	return {
 		formId: form_id,
 		clientSecret: client_secret,
-		returnUrl: new URL(`/complete`, DOMAIN).toString()
+		returnUrl: new URL(`/complete`, DOMAIN).toString(),
+		domain: DOMAIN
 	};
 };
 
