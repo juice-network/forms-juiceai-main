@@ -2,12 +2,9 @@
 	import type { PageData } from './$types';
 	import OtpForm from '$lib/components/OTPForm.svelte';
 	export let data: PageData;
-	$: ({ formId, domain, returnUrl } = data);
+	$: ({ clientSecret, formId, returnUrl } = data);
 </script>
 
-<!-- {#if formId === 'default' && clientSecret && returnUrl}
+{#if formId === 'default' && clientSecret && returnUrl}
 	<OtpForm {clientSecret} {returnUrl} />
-{/if} -->
-<pre>{formId}</pre>
-<pre>{returnUrl}</pre>
-<pre>{domain}</pre>
+{/if}
