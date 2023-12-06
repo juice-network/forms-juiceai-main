@@ -12,6 +12,6 @@ export const actions = {
 			name: firstname + ' ' + lastname
 		});
 
-		throw redirect(303, `/subscription/payment?customer_id=${customer.id}`);
+		throw redirect(303, `/forms/${form_id}/subscription/payment?customer_id=${customer.id}`);
 	}
 } satisfies Actions;
