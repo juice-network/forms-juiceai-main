@@ -14,7 +14,7 @@ export const load: PageServerLoad = async ({ params }) => {
 	// });
 	return {
 		formId: form_id,
-		returnUrl: new URL(`/complete`, DOMAIN).toString(),
+		returnUrl: `${DOMAIN}/complete`,
 		// paymentIntent: JSON.stringify(data),
 		domain: DOMAIN
 	};
