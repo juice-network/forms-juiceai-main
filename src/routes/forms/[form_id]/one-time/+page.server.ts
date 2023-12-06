@@ -1,26 +1,30 @@
 import type { Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from '../$types';
-import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public';
-import { createClient } from '@supabase/supabase-js';
+// import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public';
+// import { createClient } from '@supabase/supabase-js';
 import { stripe } from '$lib/stripe';
 import { DOMAIN } from '$env/static/private';
 
 export const load: PageServerLoad = async ({ params }) => {
-	const { form_id } = params;
-	const { client_secret } = await stripe.paymentIntents.create({
-		amount: 299,
-		currency: 'usd',
-		payment_method_types: ['card']
-	});
-	return {
-		formId: form_id,
-		clientSecret: client_secret,
-		returnUrl: new URL(`/complete`, DOMAIN).toString()
-	};
+	try {
+		const { form_id } = params;
+		const { client_secret } = await stripe.paymentIntents.create({
+			amount: 299,
+			currency: 'usd',
+			payment_method_types: ['card']
+		});
+		return {
+			formId: form_id,
+			clientSecret: client_secret,
+			returnUrl: new URL(`/complete`, DOMAIN).toString()
+		};
+	} catch (error) {
+		console.error(error.message);
+	}
 };
 
 export const actions = {
-	default: async ({ cookies, request }) => {
+	default: async ({ request }) => {
 		const formData = Object.fromEntries(await request.formData());
 		// const url = PUBLIC_SUPABASE_URL;
 		// const key = PUBLIC_SUPABASE_ANON_KEY;
