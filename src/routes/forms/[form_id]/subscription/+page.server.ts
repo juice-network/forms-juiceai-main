@@ -1,21 +1,20 @@
+import { DOMAIN } from '$env/static/private';
 import { stripe } from '$lib/stripe';
 import { redirect, type Actions } from '@sveltejs/kit';
 
 export const actions = {
-	default: async ({ url }) => {
-		const session = await stripe.checkout.sessions.create({
-			line_items: [
-				{
-					price: 'price_1OJjPbJAEz2mV7i20kLTW4Qu',
-					quantity: 1
-				}
-			],
-			payment_method_types: ['card'],
-			mode: 'subscription',
-			success_url: `${url.href}/success?session_id={CHECKOUT_SESSION_ID}`,
-			cancel_url: `${url.href}/cancel`
+	default: async ({ request, params }) => {
+		const { form_id } = params;
+		const { email, firstname, lastname } = Object.fromEntries(await request.formData());
+
+		const customer = await stripe.customers.create({
+			email: String(email),
+			name: firstname + ' ' + lastname
 		});
 
-		redirect(303, session.url);
+		throw redirect(
+			303,
+			`${DOMAIN}/forms/${form_id}/subscription/payment?customer_id=${customer.id}`
+		);
 	}
 } satisfies Actions;

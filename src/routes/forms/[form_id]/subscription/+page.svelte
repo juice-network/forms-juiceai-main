@@ -1,7 +1,5 @@
 <script lang="ts">
-	// your script goes here
-
-	import SubscriptionForm from '$lib/components/SubscriptionForm.svelte';
+	import CreateSubscriptionForm from '$lib/components/CreateSubscriptionForm.svelte';
 </script>
 
-<SubscriptionForm />
+<CreateSubscriptionForm />
