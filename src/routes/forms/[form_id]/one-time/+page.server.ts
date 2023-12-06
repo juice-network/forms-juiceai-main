@@ -7,7 +7,6 @@ import { DOMAIN } from '$env/static/private';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const { form_id } = params;
-	const newURL = new URL('/complete', DOMAIN);
 	const { client_secret } = await stripe.paymentIntents.create({
 		amount: 299,
 		currency: 'usd',
@@ -16,7 +15,7 @@ export const load: PageServerLoad = async ({ params }) => {
 	return {
 		formId: form_id,
 		clientSecret: client_secret,
-		returnUrl: newURL.toString()
+		returnUrl: `${DOMAIN}/complete`
 	};
 };
 

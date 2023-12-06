@@ -20,9 +20,8 @@ export const load: PageServerLoad = async ({ url }) => {
 		expand: ['latest_invoice.payment_intent']
 	});
 
-	const newURL = new URL('/complete', DOMAIN);
 	return {
 		clientSecret: subscription.latest_invoice.payment_intent.client_secret,
-		returnUrl: newURL.toString()
+		returnUrl: `${DOMAIN}/complete`
 	};
 };
