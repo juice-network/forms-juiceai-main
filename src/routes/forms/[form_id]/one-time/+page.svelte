@@ -5,6 +5,6 @@
 	$: ({ clientSecret, formId, returnUrl } = data);
 </script>
 
-{#if formId === 'default' && clientSecret}
+{#if formId === 'default' && clientSecret && returnUrl}
 	<OtpForm {clientSecret} {returnUrl} />
 {/if}
