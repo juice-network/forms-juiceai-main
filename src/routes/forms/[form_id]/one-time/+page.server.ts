@@ -1,9 +1,9 @@
 import type { Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
+import { DOMAIN } from '$env/static/private';
 // import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public';
 // import { createClient } from '@supabase/supabase-js';
 // import { stripe } from '$lib/stripe';
-// import { DOMAIN } from '$env/static/private';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const { form_id } = params;
@@ -13,10 +13,10 @@ export const load: PageServerLoad = async ({ params }) => {
 	// 	payment_method_types: ['card']
 	// });
 	return {
-		formId: form_id
+		formId: form_id,
 		// returnUrl: new URL(`/complete`, DOMAIN).toString(),
 		// paymentIntent: JSON.stringify(data),
-		// domain: DOMAIN
+		domain: DOMAIN
 	};
 };
 
