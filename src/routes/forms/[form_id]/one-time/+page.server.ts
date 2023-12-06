@@ -7,15 +7,15 @@ import { DOMAIN } from '$env/static/private';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const { form_id } = params;
-	const data = await stripe.paymentIntents.create({
-		amount: 299,
-		currency: 'usd',
-		payment_method_types: ['card']
-	});
+	// const data = await stripe.paymentIntents.create({
+	// 	amount: 299,
+	// 	currency: 'usd',
+	// 	payment_method_types: ['card']
+	// });
 	return {
 		formId: form_id,
 		returnUrl: new URL(`/complete`, DOMAIN).toString(),
-		paymentIntent: JSON.stringify(data),
+		// paymentIntent: JSON.stringify(data),
 		domain: DOMAIN
 	};
 };
