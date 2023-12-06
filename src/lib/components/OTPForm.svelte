@@ -15,7 +15,7 @@
 	});
 </script>
 
-<article class="prose max-w-2xl">
+<article class="prose max-w-2xl p-4">
 	<h1>
 		<span style="tag: span; color: rgb(209, 213, 219); font-weight: 400;">🔥</span><span
 			style="tag: span; font-weight: 400;"

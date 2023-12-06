@@ -29,7 +29,7 @@
 	}
 </script>
 
-<article class="prose max-w-2xl">
+<article class="prose max-w-2xl py-4">
 	<h1>Payment</h1>
 
 	{#if stripe}
