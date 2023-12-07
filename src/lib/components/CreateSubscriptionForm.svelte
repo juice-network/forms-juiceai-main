@@ -2,9 +2,17 @@
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import DefaultFields from './DefaultFields.svelte';
+
+	let clientHeight = 0;
+	function sendHeightToParent() {
+		const height = document.body.scrollHeight;
+		window.parent.postMessage({ type: 'adjustHeight', height }, '*');
+	}
+
+	$: if (clientHeight) sendHeightToParent();
 </script>
 
-<article class="prose max-w-2xl py-4">
+<article class="prose max-w-2xl py-4" bind:clientHeight>
 	<h1>
 		<span style="tag: span; color: rgb(209, 213, 219); font-weight: 400;">🔥</span><span
 			style="tag: span; font-weight: 400;"

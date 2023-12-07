@@ -13,9 +13,15 @@
 	onMount(async () => {
 		stripe = await loadStripe(PUBLIC_STRIPE_KEY);
 	});
+	let clientHeight = 0;
+	function sendHeightToParent() {
+		const height = document.body.scrollHeight;
+		window.parent.postMessage({ type: 'adjustHeight', height }, '*');
+	}
+	$: if (clientHeight) sendHeightToParent();
 </script>
 
-<article class="prose max-w-2xl py-4">
+<article class="prose max-w-2xl py-4" bind:clientHeight>
 	<h1>
 		<span style="tag: span; color: rgb(209, 213, 219); font-weight: 400;">🔥</span><span
 			style="tag: span; font-weight: 400;"
@@ -74,7 +80,12 @@
 			<div class="rounded-lg border-2 focus-within:ring-blue-500 focus-within:border-blue-500 p-4">
 				<h4 class="text-4xl font-extrabold"><span>$</span>2.99</h4>
 				{#if stripe && clientSecret}
-					<Elements {stripe} {clientSecret} bind:elements>
+					<Elements
+						{stripe}
+						{clientSecret}
+						bind:elements
+						on:load={() => console.log('payment load')}
+					>
 						<PaymentElement />
 					</Elements>
 				{/if}

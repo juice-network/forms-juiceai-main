@@ -27,9 +27,17 @@
 			}
 		}
 	}
+
+	let clientHeight = 0;
+	function sendHeightToParent() {
+		const height = document.body.scrollHeight;
+		window.parent.postMessage({ type: 'adjustHeight', height }, '*');
+	}
+
+	$: if (clientHeight) sendHeightToParent();
 </script>
 
-<article class="prose max-w-2xl py-4">
+<article class="prose max-w-2xl py-4" bind:clientHeight>
 	<h1>Payment</h1>
 
 	{#if stripe}
